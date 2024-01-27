@@ -2,10 +2,10 @@ package com.microservice.employees.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.http.ResponseEntity;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.microservice.employees.entity.Employees;
@@ -22,18 +22,19 @@ public class EmployeesServiceImpl implements EmploeesService {
 	@Autowired
 	EmployeesRepository employeesRepo;
 	
-//	@Autowired
-//	RestTemplate restTemplate;
+	@Autowired
+	RestTemplate restTemplate;
 	
 	
 //	@Autowired
 //	private WebClient webClient;
-	private final APIClients apiClient;
+	
+	//private final APIClients apiClient;
 
-    @Autowired
-    public EmployeesServiceImpl(APIClients apiClient) {
-        this.apiClient = apiClient;
-    }
+//    @Autowired
+//    public EmployeesServiceImpl(APIClients apiClient) {
+//        this.apiClient = apiClient;
+//    }
    // private APIClient apiClient;
 
 	@Override
@@ -50,7 +51,7 @@ public class EmployeesServiceImpl implements EmploeesService {
 		EmployeeDto emDto = mapEmployee(em);
 		
 		
-		//ResponseEntity<DepartmentDto> respEntity = restTemplate.getForEntity("http://localhost:8084/api/departments/get/"+ em.getDepartmentId(), DepartmentDto.class);
+		ResponseEntity<DepartmentDto> respEntity = restTemplate.getForEntity("http://DEPARTMENT/api/departments/get/"+ em.getDepartmentId(), DepartmentDto.class);
 		
 //		DepartmentDto departmentDto =  webClient.get()
 //        .uri("http://localhost:8084/api/departments/get/" + em.getDepartmentId())
@@ -58,8 +59,9 @@ public class EmployeesServiceImpl implements EmploeesService {
 //                .bodyToMono(DepartmentDto.class)
 //                        .block();
 		
-		DepartmentDto departmentDto = apiClient.getDepartmentById(em.getDepartmentId());
-		//DepartmentDto departmentDto = respEntity.getBody();
+		//DepartmentDto departmentDto = apiClient.getDepartmentById(em.getDepartmentId());
+		
+		DepartmentDto departmentDto = respEntity.getBody();
 		
 		rdt.setDt(departmentDto);
 		rdt.setEm(emDto);
